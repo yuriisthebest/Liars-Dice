@@ -1,0 +1,9 @@
+{
+  "sound": true,
+  "starting_dice": 5,
+  "visual_indicators": true,
+  "roll_dice_delay": 4500,
+  "player_delay": 1200,
+  "challenge_delay": 3500,
+  "error_msg_delay": 6000
+}
