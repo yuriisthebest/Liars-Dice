@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from game import Game
+from AI import ALL_AI
 
 POSITIONS = {
     0: 4,
@@ -44,7 +45,7 @@ class Board:
         frm_players = []
         for i in range(3):
             # Window options
-            board_fr.columnconfigure(i, weight=1, minsize=190)
+            board_fr.columnconfigure(i, weight=1, minsize=200)
             board_fr.rowconfigure(i, weight=1, minsize=150)
             for j in range(3):
                 frm = tk.Frame(master=board_fr, width=200, height=200, bg="darkgreen",
@@ -66,9 +67,21 @@ class Board:
                     # Positions range from 0 to 8, excluding 4 and 7
                     pos = POSITIONS[i * 3 + j]
                     btn_add = tk.Button(master=frm, text="Add player", fg="gray")
-                    btn_add["command"] = lambda p=pos, b=btn_add, f=frm: self.game.add_player(p, b, f)
+                    btn_add["command"] = lambda p=pos, b=btn_add, f=frm: self.pick_ai(f, b, p)
                     btn_add.pack()
         self.window.mainloop()
+
+    def pick_ai(self, player_frame: tk.Frame, button: tk.Button, position: int):
+        button.destroy()
+        for i, AI in enumerate(ALL_AI):
+            btn = tk.Button(master=player_frame, text=f"{AI.get_name()}",
+                            height=1, width=6)
+            btn["command"] = lambda bot=AI: self.game.add_player(position, player_frame, bot)
+            btn.grid(row=i//3, column=i % 3)
+        randomizer = tk.Button(master=player_frame, text="Stranger",
+                               height=1, width=6)
+        randomizer["command"] = lambda: self.game.add_player(position, player_frame, "Stranger")
+        randomizer.grid(row=2, column=1)
 
     @staticmethod
     def player_frame(player):
@@ -77,7 +90,7 @@ class Board:
         if player.human:
             lbl_name = tk.Label(master=player.frame, text="This is your field")
         else:
-            lbl_name = tk.Label(master=player.frame, text=player.name)
+            lbl_name = tk.Label(master=player.frame, text=player.get_title() + player.name)
         lbl_name.pack()
         lbl_dice = tk.Label(master=player.frame, text="? " * player.num_dice)
         lbl_dice.pack()

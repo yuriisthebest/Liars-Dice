@@ -1,14 +1,14 @@
 from AI.player import Player
 
 
-class Student(Player):
+class Gambler(Player):
     @property
     def title(self) -> str:
-        return "Student "
+        return "Gambler "
 
     @staticmethod
     def get_name() -> str:
-        return "Student"
+        return "Gambler"
 
     def take_turn(self, game_state):
         pass

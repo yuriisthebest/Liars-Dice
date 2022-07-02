@@ -3,7 +3,7 @@
 The lair's dice is a game played in the movie: *"Pirates of the Caribbean: Dead Man's Chest"*.
 
 This project aims to create the game using a simple graphical interface. Only one human can play against up to 7 AIs.
-These AIs have different strategies to mix up playstyle.
+These AIs have different strategies to mix up play-style.
 
 ## Rules of the game
 
@@ -12,7 +12,7 @@ This digital version does not use cups, instead the dice are digitally hidden.
 The game is round-based.
 
 Each round, each player rolls a "hand" of dice under their cup and looks at their hand while keeping it concealed from the other players.
-The first player begins bidding. A bid consists of any face value and a number of dice that the player believes are showing that value, under all of the cups on the table.
+The first player begins bidding. A bid consists of any face value and a number of dice that the player believes are showing that value, under all the cups on the table.
 Turns rotate in clockwise order.
 
 Each player has two choices during their turn:
@@ -46,4 +46,18 @@ Choose your opponents and mode before pressing "Start the game"
 
 ## Artificial Intelligence
 
-todo
+There are 6 distinct AI styles for your opponents from which you can choose when adding them to the game.
+These AIs don't necessarily use an optimized strategy. This is to make them more or less risk taking, add more variation in the bid and because I didn't want to change it.
+A small explanation is given for each AI:
+
+* The Fool: They have no idea how the game works or how to win. They offer valid bids but that does not mean that they are correct. The fool also likes to challenge whenever the bids starts to increase.
+* The Sailor: Cautious and unwilling to take risks, they are quite resilient against challenges. They will only make small bid increases and only challenge when stuck.
+* [TODO] The Gambler: A real veteran of hidden information games. They remember everything that everyone does and will use it to their advantage.
+* [TODO] The Student: They may lack any sound logic, but the student has played this game more than anyone else and has learned some valuable lessons. They will beat you armed with a trained recurrent neural network.
+* The Teacher: As a professor of statistics, they know the most likely scenarios, and they aren't afraid to capitulate on that. They take calculated risks and can be quite aggressive on their challenges.
+* The Captain: Davy Jones himself, or another captain, joins your table. They seem to know everything and will challenge you whenever you lie. The Captain truly is the most difficult to beat.
+* The Stranger: It is unknown where the stranger came from or how it plays. It will change his playing everytime you play against him. In reality, it mimics one of the other 6 AI.
+
+## Experiments
+
+[TODO some fun stats on how the AI plays]

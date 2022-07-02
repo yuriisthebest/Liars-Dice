@@ -2,15 +2,15 @@ from .human import Human
 from .random import Randy
 from .oracle import Oracle
 from .student import Student
-from .estimator import Estimator
+from .gambler import Gambler
 from .minimalist import Minimalist
 from .statistician import Statistician
 
 ALL_AI = [
-    Estimator,
-    Minimalist,
-    Oracle,
     Randy,
+    Minimalist,
+    Gambler,
     Statistician,
-    Student
+    Student,
+    Oracle
 ]

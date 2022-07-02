@@ -29,6 +29,7 @@ class Game:
         self.current_bid = None
         self.previous_bids = None
         self.total_dice = None
+        self.correct_dice = None
         self.wild_mode = None
 
     def add_board(self, board):
@@ -37,13 +38,17 @@ class Game:
         """
         self.board = board
 
-    def add_player(self, position: int, button: tk.Button, frame: tk.Frame):
+    def add_player(self, position: int, frame: tk.Frame, bot):
         # Create a new AI
-        new_player = ALL_AI[3](frame, self.starting_dice, position, False)
+        if bot == "Stranger":
+            new_player = random.choice(ALL_AI)(frame, self.starting_dice, position, False, True)
+        else:
+            new_player = bot(frame, self.starting_dice, position, False)
         self.players[position] = new_player
         # Update GUI
-        button.destroy()
-        lbl_name = tk.Label(master=frame, text=new_player.name)
+        for child in frame.winfo_children():
+            child.destroy()
+        lbl_name = tk.Label(master=frame, text=new_player.get_title() + new_player.name)
         lbl_name.pack()
 
     def set_player_frame(self, frame: tk.Frame):
@@ -92,7 +97,8 @@ class Game:
             player = self.players[player_pos]
             self.board.player_frame(player)
         # Update GUI for human player
-        self.players[1].frame.winfo_children()[-1]["text"] = self.players[1].reveal_dice()
+        if 1 in self.players:
+            self.players[1].frame.winfo_children()[-1]["text"] = self.players[1].reveal_dice()
         self.total_dice = sum([self.players[pos].num_dice for pos in self.players])
         # The players start taking turns
         self.center_label.after(self.roll_delay, lambda: self.find_next_player(active_player))
@@ -167,7 +173,7 @@ class Game:
         value = int(value_lbl["text"])
         if not self.is_valid_bid([count, value]):
             error_label = tk.Label(master=self.center_label.master,
-                                   text="That was not a valid bid",
+                                   text="That is not a valid bid",
                                    foreground='red')
             error_label.pack()
             error_label.after(self.error_msg_delay, error_label.destroy)
@@ -213,29 +219,25 @@ class Game:
         # Remove highlight from active player
         if self.visuals:
             challenger.frame.configure(highlightbackground="darkgreen")
-        # Reveal and identify dice
-        num_dice = 0
+        # Reveal dice
         for player_id in self.players:
             self.players[player_id].frame.winfo_children()[1]["text"] = \
                 self.players[player_id].reveal_dice()
-            # Count the dice
-            for dice in self.players[player_id].dice:
-                if dice == self.current_bid[1] or (self.wild_mode and dice == 1):
-                    num_dice += 1
         # Determine winner
-        if num_dice >= self.current_bid[0]:
-            # Defender wins
+        if self.is_correct_bid():
+            # Defender wins, Challenger loses
             loser = challenger
         else:
+            # Challenger wins, Defender loses
             loser = defender
         loser.num_dice -= 1
         t = f"The bid is: {self.current_bid[0]} {self.current_bid[1]}"
         t += "'s\n" if self.current_bid[0] != 1 else "\n"
         wild = " (+ wild ones)" if self.wild_mode else ""
-        if num_dice == 1:
+        if self.correct_dice == 1:
             t += f"There is 1 {self.current_bid[1]}{wild}\n"
         else:
-            t += f"There are {num_dice} {self.current_bid[1]}'s{wild}\n"
+            t += f"There are {self.correct_dice} {self.current_bid[1]}'s{wild}\n"
         pronoun = 'has' if not loser.human else 'have'
         t += f"{loser.name} {pronoun} lost one dice!"
         self.center_label["text"] = t
@@ -244,8 +246,13 @@ class Game:
             del self.players[loser.pos]
             for child in loser.frame.winfo_children():
                 child.destroy()
-            t += f"\n{loser.name} is out of the game!"
+            pronoun = "are" if loser.human else "is"
+            t += f"\n{loser.name} {pronoun} out of the game!"
             self.center_label["text"] = t
+            # If the human lost, also remove all controls
+            if loser.human:
+                for child in self.board.controls_fr.winfo_children():
+                    child.destroy()
         # Check if there is a winner
         if len(self.players) == 1:
             winner = list(self.players.values())[0]
@@ -261,6 +268,20 @@ class Game:
             button_next["command"] = lambda but=button_next:\
                 self.next_round(but, loser.pos, challenger, defender)
             button_next.pack(padx=5, pady=10)
+
+    def is_correct_bid(self) -> bool:
+        """
+        Takes the current bid and checks if it is correct or not
+        @return: True if the current bid is correct, False otherwise
+        """
+        # Count the dice
+        num_dice = 0
+        for player_id in self.players:
+            for dice in self.players[player_id].dice:
+                if dice == self.current_bid[1] or (self.wild_mode and dice == 1):
+                    num_dice += 1
+        self.correct_dice = num_dice
+        return num_dice >= self.current_bid[0]
 
     def next_round(self, button: tk.Button, loser_pos: int, challenger: Player, defender: Player):
         try:
