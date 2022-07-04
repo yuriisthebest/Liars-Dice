@@ -134,7 +134,9 @@ class Game:
             self.challenge(active_player)
             return
         self.current_bid = bid
-        self.previous_bids.append(bid)
+        self.previous_bids.append([bid,
+                                   self.players[active_player].pos,
+                                   self.players[active_player].num_dice])
         # Update GUI
         bid_text = f"I think there are {bid[0]} {bid[1]}'s" \
             if bid[0] > 1 \
@@ -189,7 +191,7 @@ class Game:
             lbl_bid.pack()
             # Update bid
             self.current_bid = bid
-            self.previous_bids.append(self.current_bid)
+            self.previous_bids.append([self.current_bid, 1, self.players[1].num_dice])
             self.find_next_player(active_player=2)
 
     def challenge(self, active_player: int):

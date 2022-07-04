@@ -50,7 +50,7 @@ class Statistician(Player):
             if (value == game_state.current_bid[1]
                     and expected_dice + dice[value] > game_state.current_bid[0]):
                 return [expected_dice + dice[value], value]
-            elif value > game_state.current_bid[1]:
+            elif value > game_state.current_bid[1] and expected_dice + dice[value] > 0:
                 return [expected_dice + dice[value], value]
             # Bluff on 6
             if value == 6 and game_state.current_bid[0] == expected_dice + dice[value]:

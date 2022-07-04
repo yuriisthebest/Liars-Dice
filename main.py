@@ -15,5 +15,5 @@ def main(root):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    root = tk.Tk()
-    main(root)
+    root_window = tk.Tk()
+    main(root_window)

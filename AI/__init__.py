@@ -11,6 +11,6 @@ ALL_AI = [
     Minimalist,
     Gambler,
     Statistician,
-    Student,
+    # Student,
     Oracle
 ]

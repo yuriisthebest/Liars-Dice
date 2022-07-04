@@ -17,7 +17,7 @@ class Sound:
         if not self.sound_on:
             return None
         try:
-            sound = Thread(target=playsound, args=("Dice.mp3", ))
+            sound = Thread(target=playsound, args=("sounds/Dice.mp3", ))
             sound.start()
         except Exception:
             pass
@@ -26,7 +26,7 @@ class Sound:
         if not self.sound_on:
             return None
         try:
-            sound = Thread(target=playsound, args=("liar.mp3", ))
+            sound = Thread(target=playsound, args=("sounds/liar.mp3", ))
             sound.start()
         except Exception:
             pass

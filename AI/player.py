@@ -10,7 +10,7 @@ if not names:
 class Player:
     def __init__(self, frame, start_dice: int, position: int, human: bool, hidden: bool = False):
         """
-        Create a
+        Create a player with dice, a name, title and place on the table
 
         @param frame: The frame that contains this players info and playing field
         @param start_dice: The amount of dice to start the game with

@@ -11,4 +11,5 @@ class Student(Player):
         return "Student"
 
     def take_turn(self, game_state):
-        pass
+        # Temp return
+        return [39, 6]

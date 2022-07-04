@@ -6,7 +6,7 @@ from AI.player import Player
 class Randy(Player):
     @property
     def title(self) -> str:
-        return "Cabinboy "
+        return "Cabin-boy "
 
     @staticmethod
     def get_name() -> str:
@@ -20,5 +20,5 @@ class Randy(Player):
             # 12% chance to challenge
             if random.randint(1, 100) <= 12 and game_state.current_bid != [0, 0]:
                 return -1
-            bid = [random.randint(1, game_state.total_dice), random.randint(1, 6)]
+            bid = [random.randint(1, game_state.total_dice // 4 + 1), random.randint(1, 6)]
         return bid
